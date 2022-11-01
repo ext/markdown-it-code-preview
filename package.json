@@ -30,7 +30,7 @@
   "prettier": "@html-validate/prettier-config",
   "devDependencies": {
     "@html-validate/commitlint-config": "3.0.6",
-    "@html-validate/eslint-config": "5.5.6",
+    "@html-validate/eslint-config": "5.5.8",
     "@html-validate/eslint-config-typescript": "5.5.7",
     "@html-validate/eslint-config-typescript-typeinfo": "5.5.0",
     "@html-validate/jest-config": "3.5.1",
