@@ -98,6 +98,12 @@ const layout = (content) =>
 						}
 					}
 				</style>
+				<script
+					src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.41/vue.global.min.js"
+					integrity="sha512-lgbnN1gNswbc8DPmFF2F9n951EGPK0p9PmPkzECHyjC4bmv6Be6ezWQB7mIjPJ5pAdYehSj+Nm0brW0NjCoFmQ=="
+					crossorigin="anonymous"
+					referrerpolicy="no-referrer"
+				></script>
 			</head>
 			<body>
 				<header>
@@ -105,6 +111,7 @@ const layout = (content) =>
 					<nav>
 						<a href="./index.html">HTML/CSS</a>
 						<a href="./import.html">Importing files</a>
+						<a href="./vue.html">Vue</a>
 					</nav>
 				</header>
 				<main>${content}</main>
@@ -122,11 +129,13 @@ function renderMarkdown(md, src, dst) {
 function headingLevel(initial) {
 	const offset = initial - 1;
 	return function (md) {
-		md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
+		/* eslint-disable-next-line camelcase */
+		md.renderer.rules.heading_open = function (tokens, idx) {
 			const { tag } = tokens[idx];
 			return tag.replace(/h(\d)/, (_, n) => `<h${parseInt(n, 10) + offset}>`);
 		};
-		md.renderer.rules.heading_close = function (tokens, idx, options, env, self) {
+		/* eslint-disable-next-line camelcase */
+		md.renderer.rules.heading_close = function (tokens, idx) {
 			const { tag } = tokens[idx];
 			return tag.replace(/h(\d)/, (_, n) => `</h${parseInt(n, 10) + offset}>`);
 		};
@@ -141,6 +150,7 @@ async function build() {
 		platform: "node",
 		target: ["node16"],
 		outdir: "dist",
+		external: ["@vue/compiler-sfc", "esbuild"],
 	});
 
 	const { codePreview } = await import("./dist/index.js");

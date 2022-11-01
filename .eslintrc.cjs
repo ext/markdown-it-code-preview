@@ -7,6 +7,7 @@ module.exports = {
 	rules: {
 		"import/extensions": "off",
 		"node/no-unsupported-features/es-syntax": "off",
+		"security/detect-object-injection": "off",
 	},
 
 	overrides: [
