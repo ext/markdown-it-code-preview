@@ -19,7 +19,7 @@
     "prepare": "husky install",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
-    "test": "jest --ci"
+    "test": "jest --ci --passWithNoTests"
   },
   "browser": {
     "vue": "./src/shims/vue.js"
