@@ -1,7 +1,10 @@
+import fs from "node:fs";
+import path from "node:path";
 import type MarkdownIt from "markdown-it";
 import type Token from "markdown-it/lib/token";
 import type Renderer from "markdown-it/lib/renderer";
 import hljs from "highlight.js";
+import { fstat } from "fs";
 
 export function codePreview(md: MarkdownIt): void {
 	md.renderer.rules.fence = fence;
@@ -14,11 +17,20 @@ export function codePreview(md: MarkdownIt): void {
 		_env: any,
 		_self: Renderer
 	): string {
-		const { content, info } = tokens[idx];
-		const [language, ...tags] = info.split(/\s+/);
+		let { content } = tokens[idx];
+		const { info } = tokens[idx];
+		let [language, ...tags] = info.split(/\s+/);
 
 		if (language === "" || language === "plaintext") {
 			return `<pre><code>${md.utils.escapeHtml(content)}</code></pre>`;
+		}
+
+		if (language === "import") {
+			const filename = content.trim();
+			const parsed = path.parse(filename);
+			console.log(filename);
+			content = fs.readFileSync(path.join("examples", filename), "utf-8");
+			language = parsed.ext.slice(1);
 		}
 
 		const noPreview = tags.includes("nopreview");

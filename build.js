@@ -37,8 +37,30 @@ const layout = (content) =>
 						padding: 1rem;
 						background: #f0a;
 					}
-					header h1 {
+					header h1,
+					header nav {
 						margin: auto;
+					}
+					header h1 {
+						color: #fff;
+						text-shadow: 0 0 5px #ccc;
+					}
+					header nav {
+						margin-top: 1rem;
+					}
+					header nav a {
+						display: inline-block;
+						color: #fff;
+						font-size: 1.5rem;
+						margin-right: 1rem;
+						text-shadow: 0 0 5px #666;
+						text-decoration: none;
+					}
+					header nav a:hover {
+						text-shadow: 0 0 5px #ccc;
+						text-decoration: underline;
+						transform: scale(1.2) rotate(-5deg);
+						transition: transform 300ms ease-in;
 					}
 					main {
 						margin: auto;
@@ -70,6 +92,7 @@ const layout = (content) =>
 					}
 					@media (min-width: 700px) {
 						header h1,
+						header nav,
 						main {
 							width: 700px;
 						}
@@ -79,6 +102,10 @@ const layout = (content) =>
 			<body>
 				<header>
 					<h1>My awesome site!</h1>
+					<nav>
+						<a href="./index.html">HTML/CSS</a>
+						<a href="./import.html">Importing files</a>
+					</nav>
 				</header>
 				<main>${content}</main>
 			</body>
