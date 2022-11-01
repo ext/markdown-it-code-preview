@@ -40,6 +40,7 @@ function compile(code: string, language: string, filename: string): string {
 
 			sourcecode += `\nVue.createApp(defaultExport).mount('#app');\n`;
 
+			fs.mkdirSync("temp", { recursive: true });
 			fs.writeFileSync("temp/input.js", sourcecode, "utf-8");
 			esbuild.buildSync({
 				entryPoints: ["temp/input.js"],
