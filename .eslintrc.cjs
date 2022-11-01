@@ -4,6 +4,11 @@ module.exports = {
 	root: true,
 	extends: ["@html-validate"],
 
+	rules: {
+		"import/extensions": "off",
+		"node/no-unsupported-features/es-syntax": "off",
+	},
+
 	overrides: [
 		{
 			files: "*.ts",
