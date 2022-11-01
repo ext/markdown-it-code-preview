@@ -153,6 +153,7 @@ async function build() {
 		external: ["@vue/compiler-sfc", "esbuild"],
 	});
 
+	/* eslint-disable-next-line import/no-unresolved */
 	const { codePreview } = await import("./dist/index.js");
 	const md = markdownIt("commonmark");
 	md.use(headingLevel(2));
