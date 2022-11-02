@@ -3,6 +3,7 @@ import globCb from "glob";
 import { type FileReader } from "./file-reader";
 import { render } from "./render";
 import { type Document } from "./document";
+import { generateNavtree } from "./navigation";
 
 export { type FileReader, frontMatterFileReader } from "./file-reader";
 
@@ -58,9 +59,10 @@ export async function generator(options: GeneratorOptions): Promise<void> {
 	/* eslint-disable-next-line tsdoc/syntax */
 	/** @TODO async generator? */
 	const docs = await getAllDocuments(options);
+	const nav = generateNavtree(docs);
 	await Promise.all(
 		docs.map((doc) => {
-			return render(options.outputFolder, doc);
+			return render(options.outputFolder, doc, nav);
 		})
 	);
 }

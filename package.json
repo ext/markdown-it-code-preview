@@ -5,6 +5,9 @@
   "license": "ISC",
   "author": "",
   "main": "index.js",
+  "browser": {
+    "vue": "./src/shims/vue.js"
+  },
   "files": [
     "dist"
   ],
@@ -21,13 +24,13 @@
     "prettier:write": "prettier --write .",
     "test": "jest --ci --passWithNoTests"
   },
-  "browser": {
-    "vue": "./src/shims/vue.js"
-  },
   "commitlint": {
     "extends": "@html-validate"
   },
   "prettier": "@html-validate/prettier-config",
+  "jest": {
+    "preset": "@html-validate/jest-config"
+  },
   "devDependencies": {
     "@html-validate/commitlint-config": "3.0.6",
     "@html-validate/eslint-config": "5.5.8",
@@ -38,6 +41,7 @@
     "@html-validate/release-scripts": "3.5.9",
     "@types/dedent": "0.7.0",
     "@types/glob": "8.0.0",
+    "@types/jest": "29.2.1",
     "@types/markdown-it": "12.2.3",
     "@types/node": "18.11.9",
     "@vue/compiler-sfc": "3.2.41",

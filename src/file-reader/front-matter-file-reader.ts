@@ -17,7 +17,7 @@ export async function frontMatterFileReader(
 		tag: "markdown",
 		template: blocks.attributes.layout ?? "default",
 		fileInfo: {
-			path: parsed.dir !== "" ? parsed.dir : ".",
+			path: parsed.dir !== "" ? `./${parsed.dir}` : ".",
 			name: parsed.name,
 			fullPath: filePath,
 		},

@@ -5,6 +5,7 @@ import dedent from "dedent";
 import markdownIt from "markdown-it";
 import { type Document } from "../document";
 import { codePreview } from "../code-preview";
+import { type NavigationNode } from "../navigation";
 
 const pkg = JSON.parse(readFileSync("package.json", "utf-8")) as {
 	devDependencies: Record<string, string>;
@@ -28,7 +29,10 @@ function headingLevel(initial: number): (md: markdownIt) => void {
 	};
 }
 
-const layout = (content: string): string =>
+const layout = (
+	content: string,
+	{ topnav, sidenav }: { topnav: NavigationNode; sidenav: NavigationNode | undefined }
+): string =>
 	dedent(/* HTML */ `
 		<!DOCTYPE html>
 		<html lang="en">
@@ -49,15 +53,20 @@ const layout = (content: string): string =>
 					body {
 						font-family: sans-serif;
 						background: #eee;
+						min-height: 100vh;
+						grid-template-columns: 200px 1fr;
+						grid-template-rows: auto 1fr auto;
+						display: grid;
+						grid-template-areas: "header header" "nav  main" "footer footer";
+						grid-gap: 1rem;
 					}
 					header {
-						margin-bottom: 1rem;
+						grid-area: header;
 						padding: 1rem;
 						background: #f0a;
 					}
 					header h1,
 					header nav {
-						margin: auto;
 					}
 					header h1 {
 						color: #fff;
@@ -80,8 +89,11 @@ const layout = (content: string): string =>
 						transform: scale(1.2) rotate(-5deg);
 						transition: transform 300ms ease-in;
 					}
+					#main {
+						grid-area: main;
+						padding-right: 1rem;
+					}
 					main {
-						margin: auto;
 						padding: 1rem;
 						background: #fff;
 						border-left: 1px solid #ccc;
@@ -92,6 +104,24 @@ const layout = (content: string): string =>
 					}
 					main h2:first-child {
 						margin-top: 0;
+					}
+					#sidenav {
+						grid-area: nav;
+						padding-left: 1rem;
+					}
+					#sidenav nav {
+						padding: 1rem;
+						background: #fff;
+						border-left: 1px solid #ccc;
+						border-top: 1px solid #ccc;
+						border-right: 1px solid #999;
+						border-bottom: 1px solid #999;
+						border-radius: 4px;
+					}
+					footer {
+						grid-area: footer;
+						padding: 1rem;
+						background: #f0a;
 					}
 					.code-preview {
 						border-left: 1px solid #999;
@@ -108,13 +138,6 @@ const layout = (content: string): string =>
 					.code-preview__markup {
 						margin: 0;
 					}
-					@media (min-width: 700px) {
-						header h1,
-						header nav,
-						main {
-							width: 700px;
-						}
-					}
 				</style>
 				<script
 					src="https://cdnjs.cloudflare.com/ajax/libs/vue/${vueVersion}/vue.global.min.js"
@@ -127,12 +150,20 @@ const layout = (content: string): string =>
 				<header>
 					<h1>My awesome site!</h1>
 					<nav>
-						<a href="./index.html">HTML/CSS</a>
-						<a href="./import.html">Importing files</a>
-						<a href="./vue.html">Vue</a>
+						${topnav.children.map((it) => `<a href="${it.path}">${it.title}</a>`).join("\n")}
 					</nav>
 				</header>
-				<main>${content}</main>
+				<div id="sidenav">
+					<nav>
+						${sidenav
+							? sidenav.children.map((it) => `<a href="${it.path}">${it.title}</a>`).join("\n")
+							: ""}
+					</nav>
+				</div>
+				<div id="main">
+					<main>${content}</main>
+				</div>
+				<footer>Lorem ipsum</footer>
 			</body>
 		</html>
 	`);
@@ -141,10 +172,17 @@ const md = markdownIt("commonmark");
 md.use(codePreview);
 md.use(headingLevel(2));
 
-export async function render(outputFolder: string, doc: Document): Promise<void> {
+export async function render(
+	outputFolder: string,
+	doc: Document,
+	nav: NavigationNode
+): Promise<void> {
 	const { fileInfo } = doc;
 	const dst = path.join(outputFolder, fileInfo.path, `${fileInfo.name}.html`);
+	const category = fileInfo.path.split("/")[1];
 	await fs.mkdir(path.dirname(dst), { recursive: true });
 	const html = md.render(doc.body);
-	await fs.writeFile(dst, layout(html), "utf-8");
+	const topnav = nav;
+	const sidenav = category ? nav.children.find((it) => it.name === category) : undefined;
+	await fs.writeFile(dst, layout(html, { topnav, sidenav }), "utf-8");
 }
