@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{{ doc.title }} - My awesome site</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/{{ versions.hljs }}/styles/default.min.css"
+		/>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family: sans-serif;
+				background: #eee;
+				min-height: 100vh;
+				grid-template-columns: 200px 1fr;
+				grid-template-rows: auto 1fr auto;
+				display: grid;
+				grid-template-areas: "header header" "nav  main" "footer footer";
+				grid-gap: 1rem;
+			}
+			header {
+				grid-area: header;
+				padding: 1rem;
+				background: rgb(255, 0, 170);
+				background: linear-gradient(
+					180deg,
+					rgba(255, 0, 170, 1) 0%,
+					rgba(209, 0, 255, 1) 35%,
+					rgba(255, 0, 170, 1) 100%
+				);
+			}
+			header h1 {
+				color: #fff;
+				text-shadow: 0 0 5px #ccc;
+			}
+			header nav {
+				margin-top: 1rem;
+			}
+			header nav a {
+				display: inline-block;
+				color: #fff;
+				font-size: 1.5rem;
+				margin-right: 1rem;
+				text-shadow: 0 0 5px #666;
+				text-decoration: none;
+			}
+			header nav a:hover {
+				text-shadow: 0 0 5px #ccc;
+				text-decoration: underline;
+				transform: scale(1.2) rotate(-5deg);
+				transition: transform 300ms ease-in;
+			}
+			#main {
+				grid-area: main;
+				padding-right: 1rem;
+			}
+			main {
+				padding: 1rem;
+				background: #fff;
+				border-left: 1px solid #ccc;
+				border-top: 1px solid #ccc;
+				border-right: 1px solid #999;
+				border-bottom: 1px solid #999;
+				border-radius: 4px;
+				display: flex;
+				max-width: 100%;
+			}
+			main h2:first-child {
+				margin-top: 0;
+			}
+			main #content {
+				flex: 1 0 min-content;
+				padding-right: 1rem;
+			}
+			main #aside {
+				flex: 0 0 auto;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				padding: 0.5rem;
+				background: #efefef;
+			}
+			main #aside dt {
+				font-weight: bold;
+				text-decoration: underline;
+				margin: 0.5rem 0;
+			}
+			main #aside dd {
+				margin: 0;
+			}
+			#sidenav {
+				grid-area: nav;
+				padding-left: 1rem;
+			}
+			#sidenav nav {
+				padding: 1rem;
+				background: #fff;
+				border-left: 1px solid #ccc;
+				border-top: 1px solid #ccc;
+				border-right: 1px solid #999;
+				border-bottom: 1px solid #999;
+				border-radius: 4px;
+			}
+			#sidenav ul {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+			#sidenav a {
+				color: #333;
+				text-decoration: none;
+			}
+			#sidenav a:hover {
+				text-decoration: underline;
+			}
+			footer {
+				grid-area: footer;
+				padding: 1rem;
+				background: #0fc;
+				font-size: 1.2rem;
+			}
+			.code-preview {
+				border-left: 1px solid #999;
+				border-top: 1px solid #999;
+				border-right: 1px solid #ccc;
+				border-bottom: 1px solid #ccc;
+				border-radius: 4px;
+				width: 100%;
+			}
+			.code-preview__preview {
+				border-bottom: 1px solid #999;
+				padding: 1rem;
+				background: repeating-conic-gradient(#efefef 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+			}
+			.code-preview__markup {
+				margin: 0;
+				overflow-x: auto;
+			}
+			.badge {
+				border: 1px solid #ccc;
+				border-radius: 8px;
+				padding: 0.3rem 0.5rem;
+				display: inline-block;
+			}
+			.badge--wcag,
+			.badge--a11y {
+				background: #00f;
+				color: #fff;
+			}
+			.badge--not-so-nice {
+				background: rgb(116, 68, 6);
+				color: #fff;
+			}
+			.badge--awesome {
+				background: rgb(226, 6, 80);
+				color: #fff;
+			}
+			.badge--draft {
+				background: rgb(218, 233, 10);
+				color: #000;
+			}
+			.badge--production {
+				background: rgb(13, 214, 40);
+				color: #fff;
+			}
+		</style>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/vue/{{ versions.vue }}/vue.global.min.js"
+			integrity="sha512-lgbnN1gNswbc8DPmFF2F9n951EGPK0p9PmPkzECHyjC4bmv6Be6ezWQB7mIjPJ5pAdYehSj+Nm0brW0NjCoFmQ=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script>
+	</head>
+	<body>
+		<header>
+			<h1>My awesome site!</h1>
+			<nav>
+				<a href="{{ './index.html' | relative(doc) }}">Home</a>
+				{%- for nav in topnav.children -%}
+				<a href="{{ nav.path | relative(doc) }}">{{ nav.title }}</a>
+				{%- endfor -%}
+			</nav>
+		</header>
+
+		<div id="sidenav">
+			{%- if sidenav -%}
+			<nav>
+				<h2>{{ sidenav.title }}</h2>
+				<ul>
+					{%- for nav in sidenav.children -%}
+					<li><a href="{{ nav.path | relative(doc) }}">{{ nav.title }}</a></li>
+					{%- endfor -%}
+				</ul>
+			</nav>
+			{%- endif -%}
+		</div>
+
+		<div id="main">
+			<main>
+				<div id="content">
+					<!-- prettier-ignore -->
+					{%- block content %}
+                    {%- endblock %}
+				</div>
+
+				{% if doc.attributes.layout === 'component' %}
+				<div id="aside">
+					<!-- prettier-ignore -->
+					{%- block aside %}
+                    {%- endblock %}
+				</div>
+				{% endif %}
+			</main>
+		</div>
+		<footer>
+			Lorem ipsum
+
+			<!-- prettier-ignore -->
+			{%- block footer %}
+            {%- endblock %}
+		</footer>
+	</body>
+</html>

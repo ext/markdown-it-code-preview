@@ -18,7 +18,7 @@ async function build() {
 		platform: "node",
 		target: ["node16"],
 		outdir: "dist",
-		external: ["@vue/compiler-sfc", "esbuild"],
+		external: ["@vue/compiler-sfc", "esbuild", "nunjucks"],
 	});
 }
 

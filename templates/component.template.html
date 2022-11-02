@@ -1,0 +1,28 @@
+{% extends "base.template.html" %}
+
+<!-- prettier-ignore -->
+{% block aside %}
+<dl>
+	<dt>Picture of a cat</dt>
+	<dd><img src="https://placekitten.com/310/200" /></dd>
+	{% if doc.attributes.summary %}
+	<dt>Summary</dt>
+	<dd>{{ doc.attributes.summary }}</dd>
+	{% endif %} {% if doc.attributes.badges %}
+	<dt>Badges</dt>
+	<dd>
+		{% for badge in doc.attributes.badges %}
+		<span class="badge badge--{{ badge }}">{{ badge }}</span>
+		{% endfor %}
+	</dd>
+	{% endif %} {% if doc.attributes.wcag %}
+	<dt>WCAG</dt>
+	<dd><span class="badge badge--wcag">{{ doc.attributes.wcag }}</span></dd>
+	{% endif %}
+</dl>
+{% endblock %}
+
+<!-- prettier-ignore -->
+{% block content %}
+{{ doc.body | marked }}
+{% endblock %}
