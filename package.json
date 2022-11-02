@@ -4,7 +4,6 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "type": "module",
   "main": "index.js",
   "files": [
     "dist"
@@ -12,6 +11,7 @@
   "scripts": {
     "prebuild": "tsc",
     "build": "node build.js",
+    "postbuild": "node generate.js",
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix .",
     "prepack": "release-prepack package.json",
@@ -36,6 +36,7 @@
     "@html-validate/jest-config": "3.5.1",
     "@html-validate/prettier-config": "2.3.0",
     "@html-validate/release-scripts": "3.5.9",
+    "@types/dedent": "0.7.0",
     "@types/glob": "8.0.0",
     "@types/markdown-it": "12.2.3",
     "@types/node": "18.11.9",
