@@ -1,3 +1,7 @@
+---
+title: Example title
+---
+
 # HTML/CSS examples
 
 ## Usage

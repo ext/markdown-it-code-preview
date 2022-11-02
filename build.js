@@ -5,6 +5,7 @@ import dedent from "dedent";
 import esbuild from "esbuild";
 import markdownIt from "markdown-it";
 import globCb from "glob";
+import fm from "front-matter";
 
 const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
 const glob = promisify(globCb);
@@ -120,8 +121,9 @@ const layout = (content) =>
 	`);
 
 function renderMarkdown(md, src, dst) {
-	const markdown = fs.readFileSync(src, "utf-8");
-	const html = md.render(markdown);
+	const content = fs.readFileSync(src, "utf-8");
+	const doc = fm(content);
+	const html = md.render(doc.body);
 	fs.mkdirSync(path.dirname(dst), { recursive: true });
 	fs.writeFileSync(dst, layout(html), "utf-8");
 }
